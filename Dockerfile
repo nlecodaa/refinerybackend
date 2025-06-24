@@ -13,12 +13,14 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy requirements.txt separately (before full COPY for cache efficiency)
+COPY requirements.txt .
+
 # Install Python dependencies
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir --upgrade-strategy eager -r requirements.txt
 
-
-# Copy your backend app files
+# Copy the rest of the backend app files
 COPY . .
 
 # Expose port (default Flask)
