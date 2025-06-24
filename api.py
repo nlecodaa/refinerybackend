@@ -4,7 +4,7 @@ import os
 import tempfile
 
 from preprocessor import preprocess_image
-from pdfocr import process_pdf
+from pdf_ocr import process_pdf
 from ocr_engine import perform_ocr
 
 app = Flask(__name__)
