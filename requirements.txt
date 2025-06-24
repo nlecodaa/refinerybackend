@@ -205,3 +205,4 @@ widgetsnbextension==4.0.13
 wordcloud==1.9.4
 wrapt==1.16.0
 flask
+easyocr
