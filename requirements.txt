@@ -5,9 +5,5 @@ easyocr==1.7.1
 opencv-python==4.10.0.84
 PyMuPDF==1.24.12
 pdf2image==1.17.0
-<<<<<<< HEAD
 numpy==1.26.4s
 werkzeug
-=======
-numpy==1.26.4
->>>>>>> 1fb13106be85f00833462c1d4919dfc2730d3914
