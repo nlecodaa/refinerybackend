@@ -4,7 +4,9 @@ import os
 import tempfile
 
 from preprocessor import preprocess_image
-from ocr_engine import extract_text_tesseract  # Only use light OCR method
+from ocr_engine import extract_text_tesseract
+
+from pdf2image import convert_from_path
 
 app = Flask(__name__)
 
@@ -25,11 +27,22 @@ def ocr_route():
 
     try:
         if ext == ".pdf":
-            return jsonify({"error": "PDF support disabled in lightweight version"}), 400
+            # Convert PDF to images (one per page)
+            images = convert_from_path(temp_path)
+            all_text = []
+            for img in images:
+                # Save PIL image to a temporary file for preprocessing
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as img_temp:
+                    img.save(img_temp.name)
+                    cleaned_image = preprocess_image(img_temp.name)
+                    text = extract_text_tesseract(cleaned_image)
+                    all_text.append(text)
+                    os.remove(img_temp.name)
+            return jsonify({"text": "\n\n".join(all_text)}), 200
 
+        # For images
         cleaned_image = preprocess_image(temp_path)
         text = extract_text_tesseract(cleaned_image)
-
         return jsonify({"text": text}), 200
 
     except Exception as e:
